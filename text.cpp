@@ -20,7 +20,7 @@ MY_TEXT MyText_title_st;	//スタート
 //########## テキストを初期化する関数 ##########
 VOID InitTextParam(VOID)
 {
-	//+++++ タイトルの文字 ++++++++++++++++++++
+	//+++++ 名前の文字 ++++++++++++++++++++
 
 	wsprintf(MyText_name.string, TEXT(GAME_MY_NAME));
 	wsprintf(MyText_name.fontname, FNT_GOD_NAME);

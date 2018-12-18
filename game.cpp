@@ -22,15 +22,24 @@ int GAME_scene;		//ゲームのシーン
 //########## ゲームを初期化する関数 ##########
 //引　数：なし
 //戻り値：なし
-VOID InitGameParam(VOID)
+VOID InitGameParam(HWND hWnd)
 {
 	//ゲームのシーン設定
 	GAME_scene = (int)SCENE_TITLE;
 
 	//テキストの初期化
 	InitTextParam();
+}
+
+//########## ゲームを終了する関数 ##########
+//引　数：なし
+//戻り値：なし
+VOID RemoveGameParam(VOID)
+{
+
 
 }
+
 
 //########## シーンごとに描画を変える関数 ##########
 //引　数：なし
