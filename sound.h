@@ -25,7 +25,8 @@
 #define SOUND_KOUKA_MP3_2	TEXT(".\\MY_SOUND\\magical_2.mp3")
 
 //+++++ BGM ++++++++++++++++++++
-#define SOUND_BGM_MP3_1		".\\MY_SOUND\\magical_1.mp3"
+
+#define SOUND_BGM_MP3_1		".\\MY_SOUND\\field.mp3"
 
 //+++++ サウンドファイルの種類 ++++++++++++++++++++
 #define SOUND_KIND_BEEP		0	//Beep関数
