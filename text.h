@@ -123,7 +123,7 @@ extern MY_TEXT MyText_name;		//名前
 extern MY_TEXT MyText_title;	//タイトル
 extern MY_TEXT MyText_title_st;	//スタート
 
-//▲▲▲▲▲ 本体はfps.cpp ▲▲▲▲▲
+//▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲
 
 //##########  関数 参照の宣言 ##########
 

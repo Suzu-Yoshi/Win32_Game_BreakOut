@@ -8,6 +8,7 @@
 #include "text.h"
 #include "fps.h"
 #include "game.h"	
+#include "keyboad.h"	
 
 //########## ライブラリ読み込み ##########
 
@@ -57,29 +58,13 @@ struct MY_STRUCT_GAME_WINDOW
 	POINT		point_Mouse;	//マウスの座標
 };
 
-//キー状態の構造体
-struct MY_STRUCT_KEY_STATE
-{
-	BYTE KeyBoard[256];			//全てのキー状態を入れる変数
-	BOOL IsDownUP = FALSE;		//上キーを押しているか
-	BOOL IsDownDOWN = FALSE;	//下キーを押しているか
-	BOOL IsDownRIGHT = FALSE;	//右キーを押しているか
-	BOOL IsDownLEFT = FALSE;	//左キーを押しているか
-	BOOL IsDownSPACE = FALSE;	//スペースキーを押しているか
-};
-
 //########## 名前の再定義 ##########
 typedef MY_STRUCT_GAME_WINDOW	MY_WIN;
-
-typedef MY_STRUCT_KEY_STATE		MY_KEY;
 
 //########## グローバル変数の宣言と初期化 ##########
 
 //自作ウィンドウ構造体の変数
 MY_WIN MyWin;
-
-//キー構造体の変数
-MY_KEY MyKey;
 
 //########## プロトタイプ宣言 ##########
 
@@ -97,9 +82,6 @@ VOID MY_SetClientSize(VOID);
 
 //ダブルバッファリングの設定をする
 VOID MY_SetDoubleBufferring(VOID);
-
-//どのキーを押しているか判定
-VOID MY_CHECK_KEYDOWN(VOID);
 
 //シーンごとに描画を変える
 VOID selectSceneDraw(VOID);
@@ -349,74 +331,6 @@ VOID MY_SetDoubleBufferring(VOID)
 	return;
 }
 
-//########## どのキーを押しているか判定する関数 ##########
-//引　数：なし
-//戻り値：なし
-VOID MY_CHECK_KEYDOWN(VOID)
-{
-	//すべての仮想キーの現在の状態を一気に取得する
-	GetKeyboardState(MyKey.KeyBoard);
-
-	//仮想キーコードで、A～Z、0～9は、ASCIIコードを指定
-	BYTE IskeyDown_UP = MyKey.KeyBoard['W'] & 0x80;
-	BYTE IskeyDown_DOWN = MyKey.KeyBoard['D'] & 0x80;
-	BYTE IskeyDown_RIGHT = MyKey.KeyBoard['A'] & 0x80;
-	BYTE IskeyDown_LEFT = MyKey.KeyBoard['S'] & 0x80;
-	BYTE IskeyDown_SPACE = MyKey.KeyBoard[VK_SPACE] & 0x80;
-
-	//上キーが押されているか判定する
-	if (IskeyDown_UP != 0)
-	{
-		MyKey.IsDownUP = TRUE;
-	}
-	else
-	{
-		MyKey.IsDownUP = FALSE;
-	}
-
-	//下キーが押されているか判定する
-	if (IskeyDown_DOWN != 0)
-	{
-		MyKey.IsDownDOWN = TRUE;
-	}
-	else
-	{
-		MyKey.IsDownDOWN = FALSE;
-	}
-
-	//右キーが押されているか判定する
-	if (IskeyDown_RIGHT != 0)
-	{
-		MyKey.IsDownRIGHT = TRUE;
-	}
-	else
-	{
-		MyKey.IsDownRIGHT = FALSE;
-	}
-
-	//左キーが押されているか判定する
-	if (IskeyDown_LEFT != 0)
-	{
-		MyKey.IsDownLEFT = TRUE;
-	}
-	else
-	{
-		MyKey.IsDownLEFT = FALSE;
-	}
-
-	//スペースキーが押されているか判定する
-	if (IskeyDown_SPACE != 0)
-	{
-		MyKey.IsDownSPACE = TRUE;
-	}
-	else
-	{
-		MyKey.IsDownSPACE = FALSE;
-	}
-
-	return;
-}
-
 //########## ウィンドウプロシージャ関数 ##########
 LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -481,7 +395,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
 		//シーンごとに描画するものを変える
-		selectSceneDraw(MyWin.hdc_double,MyWin.win_rect_cli);
+		selectSceneDraw(MyWin.hdc_double, MyWin.win_rect_cli);
 
 		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 

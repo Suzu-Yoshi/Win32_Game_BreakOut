@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="keyboad.cpp" />
     <ClCompile Include="text.cpp" />
     <ClCompile Include="fps.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
+    <ClInclude Include="keyboad.h" />
     <ClInclude Include="text.h" />
     <ClInclude Include="fps.h" />
   </ItemGroup>
