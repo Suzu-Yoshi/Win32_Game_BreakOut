@@ -31,8 +31,6 @@
 //ウィンドウのタイトルをなくす
 #define WS_NOT_TITLE WS_POPUP | WS_BORDER
 
-
-
 //########## 列挙型 ##########
 
 //ウィンドウの表示を変更
@@ -57,11 +55,7 @@ struct MY_STRUCT_GAME_WINDOW
 	HBITMAP		hbmp_double;	//ﾀﾞﾌﾞﾙﾊﾞｯﾌｧﾘﾝｸﾞ用
 	HDC			hdc_double;		//ﾀﾞﾌﾞﾙﾊﾞｯﾌｧﾘﾝｸﾞ用
 	POINT		point_Mouse;	//マウスの座標
-	int			scene;			//ゲームのシーン
-
 };
-
-
 
 //キー状態の構造体
 struct MY_STRUCT_KEY_STATE
@@ -74,18 +68,15 @@ struct MY_STRUCT_KEY_STATE
 	BOOL IsDownSPACE = FALSE;	//スペースキーを押しているか
 };
 
-
-
 //########## 名前の再定義 ##########
 typedef MY_STRUCT_GAME_WINDOW	MY_WIN;
 
-typedef MY_STRUCT_KEY_STATE	MY_KEY;
+typedef MY_STRUCT_KEY_STATE		MY_KEY;
 
 //########## グローバル変数の宣言と初期化 ##########
 
 //自作ウィンドウ構造体の変数
 MY_WIN MyWin;
-
 
 //キー構造体の変数
 MY_KEY MyKey;
@@ -169,18 +160,6 @@ int WINAPI WinMain(
 
 	return MyWin.msg.wParam;
 }
-
-//########## ゲームを初期化する ##########
-VOID InitGameParam(VOID)
-{
-	//ゲームのシーン設定
-	MyWin.scene = (int)SCENE_TITLE;
-
-	//テキストの初期化
-	InitTextParam();
-
-}
-
 
 //########## 自分のウィンドウクラスを作成、登録する関数 ##########
 //引　数：メイン関数のインスタンスハンドル
@@ -297,6 +276,8 @@ BOOL MY_CreateWindow(HINSTANCE hInstance)
 }
 
 //########## クライアント領域の設定をする関数 ##########
+//引　数：なし
+//戻り値：なし
 VOID MY_SetClientSize(VOID)
 {
 	//領域を管理する構造体
@@ -346,6 +327,8 @@ VOID MY_SetClientSize(VOID)
 }
 
 //########## ダブルバッファリングの設定をする関数 ##########
+//引　数：なし
+//戻り値：なし
 VOID MY_SetDoubleBufferring(VOID)
 {
 	// ウインドウのデバイスコンテキストのハンドルを取得
@@ -367,6 +350,8 @@ VOID MY_SetDoubleBufferring(VOID)
 }
 
 //########## どのキーを押しているか判定する関数 ##########
+//引　数：なし
+//戻り値：なし
 VOID MY_CHECK_KEYDOWN(VOID)
 {
 	//すべての仮想キーの現在の状態を一気に取得する
@@ -432,67 +417,6 @@ VOID MY_CHECK_KEYDOWN(VOID)
 	return;
 }
 
-//########## シーンごとに描画を変える関数 ##########
-VOID selectSceneDraw()
-{
-	switch (MyWin.scene)
-	{
-
-	case SCENE_TITLE:
-		//タイトル画面
-
-		//タイトル画面の描画
-		DrawTitle(MyWin.hdc_double, MyWin.win_rect_cli);
-
-		break;
-	case SCENE_PLAY:
-		//ゲーム中
-
-
-		break;
-
-	case SCENE_END:
-		//ゲーム終了
-
-
-		break;
-	}
-
-	return;
-}
-
-//########## タイトル画面の背景を描画する関数 ##########
-VOID DrawTitle(HDC hdc, RECT rect_c)
-{
-	//+++++ 背景の描画 ++++++++++++++++++++
-
-	//ブラシを作成
-	HBRUSH hbrush = CreateSolidBrush(RGB(0, 0, 0));
-
-	//ブラシを設定
-	SelectObject(MyWin.hdc_double, hbrush);
-
-	//四角を描画
-	Rectangle(
-		hdc,			//デバイスコンテキストのハンドル
-		rect_c.left,	//四角の左上のX座標
-		rect_c.top,		//四角の左上のY座標
-		rect_c.right,	//四角の右下のX座標
-		rect_c.bottom);	//四角の右下のY座標
-
-	//ブラシを削除
-	DeleteObject(hbrush);
-
-	//+++++ 背景の文字を描画 ++++++++++++++++++++
-	MY_TextOut(hdc,MyText_title);		//タイトル
-	MY_TextOut(hdc, MyText_title_st);	//スタート
-
-	return;
-}
-
-
-
-
 //########## ウィンドウプロシージャ関数 ##########
 LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -557,7 +481,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
 		//シーンごとに描画するものを変える
-		selectSceneDraw();
+		selectSceneDraw(MyWin.hdc_double,MyWin.win_rect_cli);
 
 		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 

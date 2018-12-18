@@ -55,6 +55,9 @@
 #define FNT_TANU_PASS	TEXT(".\\MY_FONT\\TanukiMagic.ttf")
 #define FNT_TANU_NAME	TEXT("たぬき油性マジック")
 
+#define FNT_GOD_PASS	TEXT(".\\MY_FONT\\GodEaterRegular.ttf")
+#define FNT_GOD_NAME	TEXT("GodEater")
+
 //+++++ 文字の揃え方 ++++++++++++++++++++
 
 #define TEXT_ALIGN_U_LEFT	1	//縦：上揃え　/横：左揃え
@@ -93,14 +96,16 @@ struct MY_STRUCT_TEXT
 	COLORREF bkcolor;	//文字の背景色
 	COLORREF color;		//文字の色
 	BOOL	 bkmode;	//背景色の設定
-
+	BOOL	 blk = FALSE;		//文字の点滅
+	int		blk_cnt;			//文字の点滅カウンタ(ポインタ)
+	int		blk_on_spd = 0;		//文字の点滅速度(表示)(FPS)
+	int		blk_off_spd = 0;	//文字の点滅速度(非表示)(FPS)
+	BOOL	blk_state = FALSE;	//文字の点滅状態
 };
 
 //########## 名前の再定義 ##########
 
 typedef MY_STRUCT_TEXT	MY_TEXT;
-
-//########## 外部 変数 参照の宣言 ##########
 
 //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 //2回目以降のヘッダファイル読み込みで
@@ -109,15 +114,18 @@ typedef MY_STRUCT_TEXT	MY_TEXT;
 #pragma once	//二重インクルードの防止
 //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 
+//########## グローバル変数 参照の宣言 ##########
+
 //▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
 
 //テキスト構造体の変数
+extern MY_TEXT MyText_name;		//名前
 extern MY_TEXT MyText_title;	//タイトル
 extern MY_TEXT MyText_title_st;	//スタート
 
 //▲▲▲▲▲ 本体はfps.cpp ▲▲▲▲▲
 
-//########## 外部 関数 参照の宣言 ##########
+//##########  関数 参照の宣言 ##########
 
 //▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
 
@@ -125,13 +133,13 @@ extern MY_TEXT MyText_title_st;	//スタート
 extern VOID InitTextParam(VOID);
 
 //テキストを表示する関数
-extern VOID MY_TextOut(HDC, MY_TEXT);
+extern VOID MY_TextOut(HDC, MY_TEXT *);
 
 //フォントを一時的に読み込む
 extern BOOL OnceFont_Read(HWND);
 
 //フォントを作成する
-extern HFONT MY_CreateFont(HDC, MY_TEXT);
+extern HFONT MY_CreateFont(HDC hdc, MY_TEXT *);
 
 //一時的に読み込んだフォントを削除する
 extern VOID OnceFont_Remove(HWND);

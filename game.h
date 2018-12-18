@@ -1,5 +1,5 @@
 //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-//game_text.h
+//game.h
 //▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 //########## マクロ定義 ##########
@@ -7,13 +7,16 @@
 //ゲームウィンドウの場所を大きさを設定
 #define GAME_LEFT		100		//横の位置
 #define GAME_TOP		100		//縦の位置
-#define GAME_RIGHT		500		//幅
-#define GAME_BOTTOM		500		//高さ
+#define GAME_RIGHT		800		//幅
+#define GAME_BOTTOM		800		//高さ
 #define GAME_POS_X		  0		//左上のX座標
 #define GAME_POS_Y		  0		//左上のY座標
 
+//自分の名前
+#define GAME_MY_NAME		"SUZUKI"
+
 //ゲームのタイトル
-#define GAME_TITLE			"SUZUKI BREAK OUT"
+#define GAME_TITLE			"BREAK OUT"
 
 //ゲームのタイトルの下
 #define GAME_TITLE_START	"SPACE PUSH START"
@@ -34,3 +37,13 @@ enum GAME_SCENE
 //コンパイルエラーになるのを防ぐ
 #pragma once	//二重インクルードの防止
 //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+//########## グローバル変数 参照の宣言 ##########
+
+extern int GAME_scene;		//ゲームのシーン
+
+//##########  関数 参照の宣言 ##########
+
+extern VOID InitGameParam(VOID);			//ゲームを初期化する
+extern VOID selectSceneDraw(HDC, RECT);		//シーンごとに描画を変える
+extern VOID DrawTitle(HDC, RECT);			//タイトル画面の背景を描画する
