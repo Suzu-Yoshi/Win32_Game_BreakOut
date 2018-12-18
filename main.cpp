@@ -1,12 +1,13 @@
 //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-//############ ブロック崩し ##############
 //main.cpp
 //▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 //########## ヘッダファイル読み込み ##########
 #include <Windows.h>
 
-#include "font.h"
+#include "text.h"
+#include "fps.h"
+#include "game.h"	
 
 //########## ライブラリ読み込み ##########
 
@@ -24,26 +25,13 @@
 //自分で作成するウィンドウクラスの名前
 #define MY_WIN_CLASS	"MY_WIN_CLASS"
 
-//ウィンドウのタイトル
-#define MY_WIN_TITLE	"SUZUKI BREAK OUT"
-
-//ウィンドウのタイトル
-#define MY_WIN_TITLE_START	"SPACE PUSH START"
-
-//ウィンドウの場所を大きさを設定
-#define WIN_X		100		//横の位置
-#define WIN_Y		100		//縦の位置
-#define WIN_WIDTH	500		//幅
-#define WIN_HEIGHT	500		//高さ
-
 //ウィンドウのサイズを変更できなくする
 #define WS_STATIC_WINDOW	WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX
 
 //ウィンドウのタイトルをなくす
 #define WS_NOT_TITLE WS_POPUP | WS_BORDER
 
-//FPS用のタイマーID
-#define TIMER_ID_FPS	100	
+
 
 //########## 列挙型 ##########
 
@@ -52,14 +40,6 @@ enum WIN_MODE {
 	WIN_RESZ_OK,	//0：ウィンドウサイズの変更ができる
 	WIN_RESZ_NG,	//1：ウィンドウサイズの変更ができない
 	WIN_NO_TITLE	//2：ウィンドウのタイトルをなくす
-};
-
-//ゲームのシーン設定
-enum GAME_SCENE
-{
-	GAME_TITLE,		//ゲーム開始
-	GAME_PLAY,		//ゲーム中
-	GAME_END		//ゲーム終了
 };
 
 //########## 構造体 ##########
@@ -81,16 +61,7 @@ struct MY_STRUCT_GAME_WINDOW
 
 };
 
-//FPSのパラメータ構造体
-struct MY_STRUCT_FPS
-{
-	float		fps_Show;		//表示するFPS
-	DWORD		fps_sta_tm;		//0フレーム目の開始時刻
-	DWORD		fps_end_tm;		//設定したフレームの終了時刻
-	DWORD		fps_count;		//フレームのカウント
-	float		fps_ave = 60.0;	//FPSを計算するための平均サンプル数
-	int			fps_disp = 60;	//FPSの値
-};
+
 
 //キー状態の構造体
 struct MY_STRUCT_KEY_STATE
@@ -103,38 +74,21 @@ struct MY_STRUCT_KEY_STATE
 	BOOL IsDownSPACE = FALSE;	//スペースキーを押しているか
 };
 
-//フォントの構造体
-struct MY_STRUCT_FONT
-{
-	HFONT hfnt;
-	int x;
-	int y;
-	TCHAR string[512] = TEXT("");
 
-};
 
 //########## 名前の再定義 ##########
 typedef MY_STRUCT_GAME_WINDOW	MY_WIN;
 
-typedef MY_STRUCT_FPS	MY_FPS;
-
 typedef MY_STRUCT_KEY_STATE	MY_KEY;
-
-typedef MY_STRUCT_FONT	MY_FONT;
 
 //########## グローバル変数の宣言と初期化 ##########
 
 //自作ウィンドウ構造体の変数
 MY_WIN MyWin;
 
-//FPS構造体の変数
-MY_FPS MyFPS;
 
 //キー構造体の変数
 MY_KEY MyKey;
-
-//フォント構造体の変数
-MY_FONT MyFont_title;
 
 //########## プロトタイプ宣言 ##########
 
@@ -152,12 +106,6 @@ VOID MY_SetClientSize(VOID);
 
 //ダブルバッファリングの設定をする
 VOID MY_SetDoubleBufferring(VOID);
-
-//画面更新の時刻を取得する関数
-BOOL MY_FPS_UPDATE(VOID);
-
-//指定したFPSになるように待つ関数
-VOID MY_FPS_WAIT(VOID);
 
 //どのキーを押しているか判定
 VOID MY_CHECK_KEYDOWN(VOID);
@@ -226,14 +174,11 @@ int WINAPI WinMain(
 VOID InitGameParam(VOID)
 {
 	//ゲームのシーン設定
-	MyWin.scene = (int)GAME_TITLE;
+	MyWin.scene = (int)SCENE_TITLE;
 
-	//タイトルの文字を設定
-	wsprintf(MyFont_title.string, TEXT(MY_WIN_TITLE));
-	
-	//タイトルの文字の場所を設定
-	MyFont_title.x = 0;
-	MyFont_title.y = 100;
+	//テキストの初期化
+	InitTextParam();
+
 }
 
 
@@ -290,12 +235,12 @@ BOOL MY_CreateWindow(HINSTANCE hInstance)
 		//ウィンドウを作成する
 		MyWin.hwnd = CreateWindow(
 			TEXT(MY_WIN_CLASS),
-			TEXT(MY_WIN_TITLE),
+			TEXT(GAME_TITLE),
 			WS_OVERLAPPEDWINDOW,
-			WIN_X,
-			WIN_Y,
-			WIN_WIDTH,
-			WIN_HEIGHT,
+			GAME_LEFT,
+			GAME_TOP,
+			GAME_RIGHT,
+			GAME_BOTTOM,
 			NULL,
 			NULL,
 			hInstance,
@@ -308,12 +253,12 @@ BOOL MY_CreateWindow(HINSTANCE hInstance)
 		//ウィンドウを作成する
 		MyWin.hwnd = CreateWindow(
 			TEXT(MY_WIN_CLASS),
-			TEXT(MY_WIN_TITLE),
+			TEXT(GAME_TITLE),
 			WS_STATIC_WINDOW,
-			WIN_X,
-			WIN_Y,
-			WIN_WIDTH,
-			WIN_HEIGHT,
+			GAME_LEFT,
+			GAME_TOP,
+			GAME_RIGHT,
+			GAME_BOTTOM,
 			NULL,
 			NULL,
 			hInstance,
@@ -326,12 +271,12 @@ BOOL MY_CreateWindow(HINSTANCE hInstance)
 		//ウィンドウを作成する
 		MyWin.hwnd = CreateWindow(
 			TEXT(MY_WIN_CLASS),
-			TEXT(MY_WIN_TITLE),
+			TEXT(GAME_TITLE),
 			WS_NOT_TITLE,
-			WIN_X,
-			WIN_Y,
-			WIN_WIDTH,
-			WIN_HEIGHT,
+			GAME_LEFT,
+			GAME_TOP,
+			GAME_RIGHT,
+			GAME_BOTTOM,
 			NULL,
 			NULL,
 			hInstance,
@@ -358,10 +303,10 @@ VOID MY_SetClientSize(VOID)
 	RECT rect_set;
 
 	//最初のクライアントの領域を設定
-	rect_set.top = WIN_Y;
-	rect_set.left = WIN_X;
-	rect_set.bottom = WIN_HEIGHT;
-	rect_set.right = WIN_WIDTH;
+	rect_set.top = GAME_TOP;
+	rect_set.left = GAME_LEFT;
+	rect_set.bottom = GAME_BOTTOM;
+	rect_set.right = GAME_RIGHT;
 
 	//ウィンドウ領域を取得
 	GetWindowRect(MyWin.hwnd, &MyWin.win_rect_win);
@@ -417,61 +362,6 @@ VOID MY_SetDoubleBufferring(VOID)
 
 	//デバイスコンテキストに画像を設定
 	SelectObject(MyWin.hdc_double, MyWin.hbmp_double);
-
-	return;
-}
-
-//########## 画面更新の時刻を取得する関数 ##########
-BOOL MY_FPS_UPDATE(VOID)
-{
-	//1フレーム目なら時刻を記憶
-	if (MyFPS.fps_count == 0)
-	{
-		//Windowsが起動してから現在までの時刻をミリ秒で取得
-		MyFPS.fps_sta_tm = GetTickCount();
-	}
-
-	//60フレーム目なら平均を計算する
-	if (MyFPS.fps_count == MyFPS.fps_ave)
-	{
-		//Windowsが起動してから現在までの時刻をミリ秒で取得
-		MyFPS.fps_end_tm = GetTickCount();
-
-		//平均的なFPS値を計算
-		MyFPS.fps_Show
-			= 1000.0f / ((MyFPS.fps_end_tm - MyFPS.fps_sta_tm) / MyFPS.fps_ave);
-
-		//次のFPS計算の準備
-		MyFPS.fps_sta_tm = MyFPS.fps_end_tm;
-
-		//カウント初期化
-		MyFPS.fps_count = 0;
-
-	}
-
-	MyFPS.fps_count++;
-
-	return true;
-}
-
-//########## 指定したFPSになるように待つ関数 ##########
-VOID MY_FPS_WAIT(VOID)
-{
-	//現在の時刻をミリ秒で取得
-	DWORD now_tm = GetTickCount();
-
-	//1フレーム目から実際にかかった時間を計算
-	DWORD keika_tm = now_tm - MyFPS.fps_sta_tm;
-
-	//待つべき時間 = かかるべき時間 - 実際にかかった時間;
-	DWORD wait_tm = (MyFPS.fps_count * 1000 / MyFPS.fps_disp) - (keika_tm);
-
-	//待つべき時間があった場合
-	if (wait_tm > 0 && wait_tm < 2000)
-	{
-		//ミリ秒分、処理を中断する
-		Sleep(wait_tm);
-	}
 
 	return;
 }
@@ -548,20 +438,20 @@ VOID selectSceneDraw()
 	switch (MyWin.scene)
 	{
 
-	case GAME_TITLE:
+	case SCENE_TITLE:
 		//タイトル画面
 
 		//タイトル画面の描画
 		DrawTitle(MyWin.hdc_double, MyWin.win_rect_cli);
 
 		break;
-	case GAME_PLAY:
+	case SCENE_PLAY:
 		//ゲーム中
 
 
 		break;
 
-	case GAME_END:
+	case SCENE_END:
 		//ゲーム終了
 
 
@@ -594,44 +484,8 @@ VOID DrawTitle(HDC hdc, RECT rect_c)
 	DeleteObject(hbrush);
 
 	//+++++ 背景の文字を描画 ++++++++++++++++++++
-
-	//フォントの詳細情報
-	TEXTMETRIC tm;
-
-	//フォントの詳細情報を取得
-	GetTextMetrics(hdc, &tm);
-
-	//フォントを作成
-	MyFont_title.hfnt = MY_CreateFont(hdc, FNT_JUD_NAME, 70, 0, ANSI_CHARSET);
-
-	//フォントを設定する
-	SelectObject(hdc, MyFont_title.hfnt);
-
-	SIZE sz;
-
-
-
-	//文字色を白にする
-	SetTextColor(hdc, RGB(255, 255, 255));
-
-	//背景を塗りつぶさない
-	SetBkMode(hdc, TRANSPARENT);
-
-	GetTextExtentPoint32(hdc, MyFont_title.string, lstrlen(MyFont_title.string), &sz);
-
-	//文字を表示
-	TextOut(
-		hdc, 
-		MyFont_title.x, 
-		MyFont_title.y + (tm.tmHeight * 0), 
-		MyFont_title.string, 
-		lstrlen(MyFont_title.string));
-
-	//フォントの詳細情報を取得
-	GetTextMetrics(hdc, &tm);
-
-	//不要なフォントを削除
-	DeleteObject(MyFont_title.hfnt);
+	MY_TextOut(hdc,MyText_title);		//タイトル
+	MY_TextOut(hdc, MyText_title_st);	//スタート
 
 	return;
 }

@@ -139,12 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="font.cpp" />
+    <ClCompile Include="text.cpp" />
+    <ClCompile Include="fps.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="title.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="font.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="text.h" />
+    <ClInclude Include="fps.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
