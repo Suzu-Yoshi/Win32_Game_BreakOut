@@ -9,6 +9,7 @@
 #include "fps.h"
 #include "game.h"	
 #include "keyboad.h"	
+#include "sound.h"
 
 //########## ライブラリ読み込み ##########
 
@@ -89,9 +90,6 @@ VOID selectSceneDraw(VOID);
 //タイトル画面の背景を描画する
 VOID DrawTitle(HDC, RECT);
 
-//ゲームを初期化する
-VOID InitGameParam(VOID);
-
 //########## メイン関数 ##########
 int WINAPI WinMain(
 	HINSTANCE hInstance,
@@ -128,7 +126,7 @@ int WINAPI WinMain(
 	ShowWindow(MyWin.hwnd, SW_SHOW);
 
 	//ゲームを初期化する
-	InitGameParam();
+	InitGameParam(MyWin.hwnd);
 
 	//メッセージを受け取り続ける
 	while (GetMessage(&MyWin.msg, NULL, 0, 0))
@@ -140,7 +138,7 @@ int WINAPI WinMain(
 		DispatchMessage(&MyWin.msg);
 	}
 
-	return MyWin.msg.wParam;
+	return (int)MyWin.msg.wParam;
 }
 
 //########## 自分のウィンドウクラスを作成、登録する関数 ##########
@@ -346,9 +344,21 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_CREATE:
 		//ウィンドウの生成＆初期化
 
+		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+
+		//テキストの初期化
+		InitTextParam();
+
 		//フォントを一時的に読み込めなかったら終了
 		if (OnceFont_Read(hwnd) == FALSE) { return -1; }
 
+		//サウンドの初期化
+		InitSoundParam(hwnd);
+
+		//サウンドを読み込めなかったら終了
+		if (MY_SOUND_Read(hwnd) == FALSE) { return -1; }
+
+		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
 		//タイマーを10ミリ間隔にセット(開始)
 		SetTimer(hwnd, TIMER_ID_FPS, 10, NULL);
@@ -521,8 +531,15 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_DESTROY:
 		//ウィンドウが破棄された(なくなった)とき
 
+		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+
 		//一時的に読み込んだフォントを削除する
 		OnceFont_Remove(hwnd);
+
+		//読み込んだサウンドをを削除する
+		MY_SOUND_Remove();
+
+		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
 		//メッセージキューに WM_QUIT を送る
 		PostQuitMessage(0);

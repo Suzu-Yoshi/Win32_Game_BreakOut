@@ -27,7 +27,7 @@
 //+++++ BGM ++++++++++++++++++++
 #define SOUND_BGM_MP3_1		".\\MY_SOUND\\magical_1.mp3"
 
-//+++++ 音楽ファイルの種類 ++++++++++++++++++++
+//+++++ サウンドファイルの種類 ++++++++++++++++++++
 #define SOUND_KIND_BEEP		0	//Beep関数
 #define SOUND_KIND_WAVE		1	//waveファイル
 #define SOUND_KIND_MP3		2	//mp3ファイル
@@ -38,10 +38,10 @@
 //########## 構造体 ##########
 
 struct MY_STRUCT_SOUND {
-	TCHAR			filepass;	//音楽ファイルのパスと名前
-	MCI_OPEN_PARMS	open;		//音楽ファイルの設定情報
-	MCI_PLAY_PARMS	play;		//音楽ファイルの再生情報
-	int				fileKind;	//音楽ファイルの種類
+	LPCWSTR			filepass;	//サウンドファイルのパスと名前
+	MCI_OPEN_PARMS	open;		//サウンドファイルの設定情報
+	MCI_PLAY_PARMS	play;		//サウンドファイルの再生情報
+	int				fileKind;	//サウンドファイルの種類
 	int				beepFreq;	//Beep関数：周波数
 	int				beepMill;	//Beep関数：再生ミリ秒
 };
@@ -50,11 +50,22 @@ struct MY_STRUCT_SOUND {
 
 typedef MY_STRUCT_SOUND	MY_SND;
 
+//########## グローバル変数 参照の宣言 ##########
+
+//▼▼▼▼▼ 本体はsound.cpp ▼▼▼▼▼
+
+extern MY_SND MySnd_BGM_title;
+
+//▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲
+
 //##########  関数 参照の宣言 ##########
 
 //▼▼▼▼▼ 本体はsound.cpp ▼▼▼▼▼
 
-extern BOOL MY_SOUND_Read(HWND, MY_SND);	//音楽を読み込む関数
-extern VOID MY_SOUND_Remove(MY_SND);		//読み込んだ音楽を削除する関数
+extern VOID InitSoundParam(HWND hWnd);			//サウンドを初期化する関数
+extern BOOL MY_SOUND_Read(HWND);				//サウンドを読み込む関数
+extern BOOL MY_SOUND_KIND_Read(HWND, MY_SND *);	//サウンドを種類ごとに読み込む関数
+extern VOID MY_SOUND_Remove(VOID);				//読み込んだサウンドを削除する関数
+extern VOID MY_SOUND_PLAY(MY_SND MySnd);		//音を鳴らす関数
 
 //▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲

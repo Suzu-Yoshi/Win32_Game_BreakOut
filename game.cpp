@@ -7,11 +7,11 @@
 
 #include "text.h"
 #include "game.h"	
-
+#include "sound.h"
 
 //########## プロトタイプ宣言 ##########
 
-VOID InitGameParam(VOID);			//ゲームを初期化する
+VOID InitGameParam(HWND);			//ゲームを初期化する
 VOID selectSceneDraw(HDC, RECT);	//シーンごとに描画を変える
 VOID DrawTitle(HDC, RECT);			//タイトル画面の背景を描画する
 
@@ -26,9 +26,6 @@ VOID InitGameParam(HWND hWnd)
 {
 	//ゲームのシーン設定
 	GAME_scene = (int)SCENE_TITLE;
-
-	//テキストの初期化
-	InitTextParam();
 }
 
 //########## ゲームを終了する関数 ##########
@@ -51,6 +48,8 @@ VOID selectSceneDraw(HDC hdc , RECT rect_cli)
 
 	case SCENE_TITLE:
 		//タイトル画面
+
+		MY_SOUND_PLAY(MySnd_BGM_title);
 
 		//タイトル画面の描画
 		DrawTitle(hdc, rect_cli);

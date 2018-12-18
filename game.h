@@ -19,7 +19,7 @@
 #define GAME_TITLE			"BREAK OUT"
 
 //ゲームのタイトルの下
-#define GAME_TITLE_START	"SPACE PUSH START"
+#define GAME_TITLE_START	"PUSH　SPACE>>START"
 
 //########## 列挙型 ##########
 
@@ -50,7 +50,7 @@ extern int GAME_scene;		//ゲームのシーン
 
 //▼▼▼▼▼ 本体はgame.cpp ▼▼▼▼▼
 
-extern VOID InitGameParam(VOID);			//ゲームを初期化する
+extern VOID InitGameParam(HWND);			//ゲームを初期化する
 extern VOID selectSceneDraw(HDC, RECT);		//シーンごとに描画を変える
 extern VOID DrawTitle(HDC, RECT);			//タイトル画面の背景を描画する
 
