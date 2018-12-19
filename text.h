@@ -1,11 +1,11 @@
-//▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 //text.h
-//▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+///▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-//########## ヘッダファイル読み込み ##########
+///########## ヘッダファイル読み込み ##########
 #include <windows.h>
 
-//########## マクロ定義 ##########
+///########## マクロ定義 ##########
 
 //+++++ エラーメッセージ ++++++++++++++++++++
 
@@ -76,7 +76,7 @@
 
 #define MAX_STRING_NUM	512	//最大文字数
 
-//########## 構造体 ##########
+///########## 構造体 ##########
 
 //テキスト構造体
 struct MY_STRUCT_TEXT
@@ -103,45 +103,43 @@ struct MY_STRUCT_TEXT
 	BOOL	blk_state = FALSE;	//文字の点滅状態
 };
 
-//########## 名前の再定義 ##########
+///########## 名前の再定義 ##########
 
 typedef MY_STRUCT_TEXT	MY_TEXT;
 
-//▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-//2回目以降のヘッダファイル読み込みで
-//プロトタイプ宣言が二回定義されることになり
-//コンパイルエラーになるのを防ぐ
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 #pragma once	//二重インクルードの防止
-//▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 
-//########## グローバル変数 参照の宣言 ##########
+///########## グローバル変数 参照の宣言 ##########
 
-//▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
+///▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
 
 //テキスト構造体の変数
 extern MY_TEXT MyText_name;		//名前
 extern MY_TEXT MyText_title;	//タイトル
 extern MY_TEXT MyText_title_st;	//スタート
 
-//▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲
+///▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲
 
-//##########  関数 参照の宣言 ##########
+///##########  関数 参照の宣言 ##########
 
-//▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
+///▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
 
-//テキストを初期化する
-extern VOID InitTextParam(VOID);
+extern VOID InitTextParam(VOID);						//テキストを初期化する
+extern VOID MY_TextOut(HDC, MY_TEXT *);					//テキストを表示する関数
+extern BOOL OnceFont_Read(HWND);						//フォントを一時的に読み込む
+extern HFONT MY_CreateFont(HDC, MY_TEXT *);				//フォントを作成する
+extern VOID OnceFont_Remove(HWND);						//一時的に読み込んだフォントを削除する
+extern VOID MY_TextOut_Gra(HDC, MY_TEXT *);				//テキストを表示する（グラデーション）
+extern VOID MY_TextOut_Align(HDC, MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
+extern BOOL MY_TextOut_Blink(HDC, MY_TEXT *);			//テキストを点滅させる
 
-//テキストを表示する関数
-extern VOID MY_TextOut(HDC, MY_TEXT *);
+extern VOID MY_TextOut_Two_Gra(
+	HDC,
+	RECT *,
+	COLORREF,
+	COLORREF,
+	BOOL);
 
-//フォントを一時的に読み込む
-extern BOOL OnceFont_Read(HWND);
-
-//フォントを作成する
-extern HFONT MY_CreateFont(HDC hdc, MY_TEXT *);
-
-//一時的に読み込んだフォントを削除する
-extern VOID OnceFont_Remove(HWND);
-
-//▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲
+///▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲

@@ -1,11 +1,11 @@
-//▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 //sound.h
-//▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+///▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-//########## ヘッダファイル読み込み ##########
+///########## ヘッダファイル読み込み ##########
 #include <windows.h>
 
-//########## マクロ定義 ##########
+///########## マクロ定義 ##########
 
 //+++++ 読み込みエラー ++++++++++++++++++++
 
@@ -26,47 +26,58 @@
 
 //+++++ BGM ++++++++++++++++++++
 
-#define SOUND_BGM_MP3_1		".\\MY_SOUND\\field.mp3"
+#define SOUND_BGM_MP3_1		".\\MY_SOUND\\magical_1.mp3"
 
 //+++++ サウンドファイルの種類 ++++++++++++++++++++
 #define SOUND_KIND_BEEP		0	//Beep関数
 #define SOUND_KIND_WAVE		1	//waveファイル
 #define SOUND_KIND_MP3		2	//mp3ファイル
 
-//+++++ その他 ++++++++++++++++++++
-#define MAX_STRING_NUM	512	//最大文字数
+//+++++ サウンドのタイプ ++++++++++++++++++++
+#define SOUND_TYPE_SE		0	//効果音
+#define SOUND_TYPE_BGM		1	//ＢＧＭ
 
-//########## 構造体 ##########
+//+++++ その他 ++++++++++++++++++++
+#define MAX_STRING_NUM		512	//最大文字数
+
+///########## 構造体 ##########
 
 struct MY_STRUCT_SOUND {
 	LPCWSTR			filepass;	//サウンドファイルのパスと名前
 	MCI_OPEN_PARMS	open;		//サウンドファイルの設定情報
 	MCI_PLAY_PARMS	play;		//サウンドファイルの再生情報
 	int				fileKind;	//サウンドファイルの種類
+	int				soundType;	//サウンドのタイプ
 	int				beepFreq;	//Beep関数：周波数
 	int				beepMill;	//Beep関数：再生ミリ秒
 };
 
-//########## 名前の再定義 ##########
+///########## 名前の再定義 ##########
 
 typedef MY_STRUCT_SOUND	MY_SND;
 
-//########## グローバル変数 参照の宣言 ##########
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+#pragma once	//二重インクルードの防止
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 
-//▼▼▼▼▼ 本体はsound.cpp ▼▼▼▼▼
+///########## グローバル変数 参照の宣言 ##########
+
+///▼▼▼▼▼ 本体はsound.cpp ▼▼▼▼▼
 
 extern MY_SND MySnd_BGM_title;
 
-//▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲
+///▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲
 
-//##########  関数 参照の宣言 ##########
+///##########  関数 参照の宣言 ##########
 
-//▼▼▼▼▼ 本体はsound.cpp ▼▼▼▼▼
+///▼▼▼▼▼ 本体はsound.cpp ▼▼▼▼▼
 
 extern VOID InitSoundParam(HWND hWnd);			//サウンドを初期化する関数
 extern BOOL MY_SOUND_Read(HWND);				//サウンドを読み込む関数
 extern BOOL MY_SOUND_KIND_Read(HWND, MY_SND *);	//サウンドを種類ごとに読み込む関数
 extern VOID MY_SOUND_Remove(VOID);				//読み込んだサウンドを削除する関数
 extern VOID MY_SOUND_PLAY(MY_SND MySnd);		//音を鳴らす関数
+extern VOID MY_SOUND_PLAY_END(WPARAM, LPARAM);	//音を鳴らした後の関数
+extern VOID MY_SOUND_PLAY_END_FUNC(WPARAM, LPARAM, MY_SND);	//音を鳴らした後の処理関数
 
-//▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲
+///▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲

@@ -1,25 +1,25 @@
-//▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 //game.cpp
-//▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+///▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-//########## ヘッダファイル読み込み ##########
+///########## ヘッダファイル読み込み ##########
 #include <windows.h>
 
 #include "text.h"
 #include "game.h"	
 #include "sound.h"
 
-//########## プロトタイプ宣言 ##########
+///########## プロトタイプ宣言 ##########
 
 VOID InitGameParam(HWND);			//ゲームを初期化する
 VOID selectSceneDraw(HDC, RECT);	//シーンごとに描画を変える
 VOID DrawTitle(HDC, RECT);			//タイトル画面の背景を描画する
 
-//########## グローバル変数の宣言と初期化 ##########
+///########## グローバル変数の宣言と初期化 ##########
 
 int GAME_scene;		//ゲームのシーン
 
-//########## ゲームを初期化する関数 ##########
+///########## ゲームを初期化する関数 ##########
 //引　数：なし
 //戻り値：なし
 VOID InitGameParam(HWND hWnd)
@@ -28,7 +28,7 @@ VOID InitGameParam(HWND hWnd)
 	GAME_scene = (int)SCENE_TITLE;
 }
 
-//########## ゲームを終了する関数 ##########
+///########## ゲームを終了する関数 ##########
 //引　数：なし
 //戻り値：なし
 VOID RemoveGameParam(VOID)
@@ -38,7 +38,7 @@ VOID RemoveGameParam(VOID)
 }
 
 
-//########## シーンごとに描画を変える関数 ##########
+///########## シーンごとに描画を変える関数 ##########
 //引　数：なし
 //戻り値：なし
 VOID selectSceneDraw(HDC hdc , RECT rect_cli)
@@ -49,10 +49,11 @@ VOID selectSceneDraw(HDC hdc , RECT rect_cli)
 	case SCENE_TITLE:
 		//タイトル画面
 
-		MY_SOUND_PLAY(MySnd_BGM_title);
-
 		//タイトル画面の描画
 		DrawTitle(hdc, rect_cli);
+
+		//タイトルのBGMを鳴らす
+		MY_SOUND_PLAY(MySnd_BGM_title);
 
 		break;
 	case SCENE_PLAY:
@@ -71,7 +72,7 @@ VOID selectSceneDraw(HDC hdc , RECT rect_cli)
 	return;
 }
 
-//########## タイトル画面の背景を描画する関数 ##########
+///########## タイトル画面の背景を描画する関数 ##########
 //引　数：デバイスコンテキストのハンドル
 //引　数：クライアント領域
 //戻り値：なし
@@ -80,7 +81,7 @@ VOID DrawTitle(HDC hdc, RECT rect_c)
 	//+++++ 背景の描画 ++++++++++++++++++++
 
 	//ブラシを作成
-	HBRUSH hbrush = CreateSolidBrush(RGB(0, 0, 0));
+	HBRUSH hbrush = CreateSolidBrush(RGB(255, 255, 255));
 
 	//ブラシを設定
 	SelectObject(hdc, hbrush);
@@ -97,9 +98,13 @@ VOID DrawTitle(HDC hdc, RECT rect_c)
 	DeleteObject(hbrush);
 
 	//+++++ 背景の文字を描画 ++++++++++++++++++++
-	MY_TextOut(hdc, &MyText_name);		//名前
-	MY_TextOut(hdc, &MyText_title);		//タイトル
-	MY_TextOut(hdc, &MyText_title_st);	//スタート
+	//MY_TextOut(hdc, &MyText_name);		//名前
+	//MY_TextOut(hdc, &MyText_title);		//タイトル
+	//MY_TextOut(hdc, &MyText_title_st);	//スタート
+
+	MY_TextOut_Gra(hdc, &MyText_name);		//名前
+	MY_TextOut_Gra(hdc, &MyText_title);		//タイトル
+	MY_TextOut_Gra(hdc, &MyText_title_st);	//スタート
 
 	return;
 }

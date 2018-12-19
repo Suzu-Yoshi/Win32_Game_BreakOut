@@ -1,8 +1,8 @@
-//▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+///▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
 //main.cpp
-//▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+///▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-//########## ヘッダファイル読み込み ##########
+///########## ヘッダファイル読み込み ##########
 #include <Windows.h>
 
 #include "text.h"
@@ -11,9 +11,9 @@
 #include "keyboad.h"	
 #include "sound.h"
 
-//########## ライブラリ読み込み ##########
+///########## ライブラリ読み込み ##########
 
-//########## マクロ定義 ##########
+///########## マクロ定義 ##########
 
 //エラーメッセージ
 #define ERR_MSG_TITLE			TEXT("WINDOW_ERROR")
@@ -33,7 +33,7 @@
 //ウィンドウのタイトルをなくす
 #define WS_NOT_TITLE WS_POPUP | WS_BORDER
 
-//########## 列挙型 ##########
+///########## 列挙型 ##########
 
 //ウィンドウの表示を変更
 enum WIN_MODE {
@@ -42,7 +42,7 @@ enum WIN_MODE {
 	WIN_NO_TITLE	//2：ウィンドウのタイトルをなくす
 };
 
-//########## 構造体 ##########
+///########## 構造体 ##########
 
 //自作ウィンドウ構造体
 struct MY_STRUCT_GAME_WINDOW
@@ -59,15 +59,15 @@ struct MY_STRUCT_GAME_WINDOW
 	POINT		point_Mouse;	//マウスの座標
 };
 
-//########## 名前の再定義 ##########
+///########## 名前の再定義 ##########
 typedef MY_STRUCT_GAME_WINDOW	MY_WIN;
 
-//########## グローバル変数の宣言と初期化 ##########
+///########## グローバル変数の宣言と初期化 ##########
 
 //自作ウィンドウ構造体の変数
 MY_WIN MyWin;
 
-//########## プロトタイプ宣言 ##########
+///########## プロトタイプ宣言 ##########
 
 //ウィンドウプロシージャ
 LRESULT CALLBACK MY_WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -90,7 +90,7 @@ VOID selectSceneDraw(VOID);
 //タイトル画面の背景を描画する
 VOID DrawTitle(HDC, RECT);
 
-//########## メイン関数 ##########
+///########## メイン関数 ##########
 int WINAPI WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -141,7 +141,7 @@ int WINAPI WinMain(
 	return (int)MyWin.msg.wParam;
 }
 
-//########## 自分のウィンドウクラスを作成、登録する関数 ##########
+///########## 自分のウィンドウクラスを作成、登録する関数 ##########
 //引　数：メイン関数のインスタンスハンドル
 //戻り値：TRUE ：正常終了
 //戻り値：FALSE：異常終了
@@ -180,7 +180,7 @@ BOOL MY_CreateWindowClass(HINSTANCE hInstance)
 	return TRUE;
 }
 
-//########## ウィンドウを生成する関数 ##########
+///########## ウィンドウを生成する関数 ##########
 //引　数：メイン関数のインスタンスハンドル
 //戻り値：TRUE ：正常終了
 //戻り値：FALSE：異常終了
@@ -255,7 +255,7 @@ BOOL MY_CreateWindow(HINSTANCE hInstance)
 	return TRUE;
 }
 
-//########## クライアント領域の設定をする関数 ##########
+///########## クライアント領域の設定をする関数 ##########
 //引　数：なし
 //戻り値：なし
 VOID MY_SetClientSize(VOID)
@@ -306,7 +306,7 @@ VOID MY_SetClientSize(VOID)
 	return;
 }
 
-//########## ダブルバッファリングの設定をする関数 ##########
+///########## ダブルバッファリングの設定をする関数 ##########
 //引　数：なし
 //戻り値：なし
 VOID MY_SetDoubleBufferring(VOID)
@@ -329,7 +329,7 @@ VOID MY_SetDoubleBufferring(VOID)
 	return;
 }
 
-//########## ウィンドウプロシージャ関数 ##########
+///########## ウィンドウプロシージャ関数 ##########
 LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	//HDC：デバイスコンテキストのハンドル
@@ -344,7 +344,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_CREATE:
 		//ウィンドウの生成＆初期化
 
-		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+		///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
 		//テキストの初期化
 		InitTextParam();
@@ -358,7 +358,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 		//サウンドを読み込めなかったら終了
 		if (MY_SOUND_Read(hwnd) == FALSE) { return -1; }
 
-		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
+		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
 		//タイマーを10ミリ間隔にセット(開始)
 		SetTimer(hwnd, TIMER_ID_FPS, 10, NULL);
@@ -377,9 +377,9 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 			//矢印キーを押しているか判定する
 			MY_CHECK_KEYDOWN();
 
-			//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+			///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
-			//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
+			///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
 			//無効リージョンを発生
 			InvalidateRect(hwnd, NULL, FALSE);
@@ -402,12 +402,12 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 		//現在のデバイスコンテキストを保存する
 		SaveDC(hdc);
 
-		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+		///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
 		//シーンごとに描画するものを変える
 		selectSceneDraw(MyWin.hdc_double, MyWin.win_rect_cli);
 
-		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
+		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
 		//メモリ内の画像を描画
 		BitBlt(hdc,
@@ -523,6 +523,13 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case MM_MCINOTIFY:
 		//MP3を再生
 
+		///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+		
+		//音を鳴らした後の処理
+		MY_SOUND_PLAY_END(wp, lp);
+
+		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
+
 		break;
 	case WM_CLOSE:
 		//閉じるボタンを押したとき
@@ -531,7 +538,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_DESTROY:
 		//ウィンドウが破棄された(なくなった)とき
 
-		//▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
+		///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
 		//一時的に読み込んだフォントを削除する
 		OnceFont_Remove(hwnd);
@@ -539,7 +546,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 		//読み込んだサウンドをを削除する
 		MY_SOUND_Remove();
 
-		//▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
+		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
 		//メッセージキューに WM_QUIT を送る
 		PostQuitMessage(0);
