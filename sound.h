@@ -26,7 +26,7 @@
 
 //+++++ BGM ++++++++++++++++++++
 
-#define SOUND_BGM_MP3_1		".\\MY_SOUND\\magical_1.mp3"
+#define SOUND_BGM_MP3_1		".\\MY_SOUND\\cyber14.mp3"
 
 //+++++ サウンドファイルの種類 ++++++++++++++++++++
 #define SOUND_KIND_BEEP		0	//Beep関数

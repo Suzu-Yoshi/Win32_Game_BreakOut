@@ -116,10 +116,13 @@ typedef MY_STRUCT_TEXT	MY_TEXT;
 ///▼▼▼▼▼ 本体はtext.cpp ▼▼▼▼▼
 
 //テキスト構造体の変数
-extern MY_TEXT MyText_name;		//名前
-extern MY_TEXT MyText_title;	//タイトル
-extern MY_TEXT MyText_title_st;	//スタート
-
+extern MY_TEXT MyText_name;			//名前
+extern MY_TEXT MyText_name_OL;		//名前の輪郭(OutLine)
+extern MY_TEXT MyText_title;		//タイトル
+extern MY_TEXT MyText_title_OL;		//タイトルの輪郭(OutLine)
+extern MY_TEXT MyText_title_st;		//スタート
+extern MY_TEXT MyText_title_st_OL;	//スタートの輪郭(OutLine)
+ 
 ///▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲
 
 ///##########  関数 参照の宣言 ##########
@@ -134,6 +137,6 @@ extern VOID OnceFont_Remove(HWND);						//一時的に読み込んだフォントを削除する
 extern VOID MY_TextOut_Gra(HDC, MY_TEXT *);				//テキストを表示する（グラデーション）
 extern VOID MY_TextOut_Align(HDC, MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
 extern BOOL MY_TextOut_Blink(HDC, MY_TEXT *);			//テキストを点滅させる
-extern VOID MY_TextOut_Two_Gra(HDC, RECT *, COLORREF, COLORREF, BOOL);	//２色のグラデーションで矩形を描画する
+extern VOID MY_TextOut_Two_Gra(HDC, RECT , COLORREF, COLORREF, BOOL);	//２色のグラデーションで矩形を描画する
 
 ///▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲

@@ -13,13 +13,13 @@
 #define GAME_POS_Y		  0		//左上のY座標
 
 //自分の名前
-#define GAME_MY_NAME		"SUZUKI"
+#define GAME_MY_NAME		"suzuki"
 
 //ゲームのタイトル
-#define GAME_TITLE			"B R E A K  O U T"
+#define GAME_TITLE			"BREAK OUT"
 
 //ゲームのタイトルの下
-#define GAME_TITLE_START	"P U S H  S P A C E >> S T A R T"
+#define GAME_TITLE_START	"PUSH SPACE >> START"
 
 ///########## 列挙型 ##########
 

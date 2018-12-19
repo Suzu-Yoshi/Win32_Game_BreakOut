@@ -97,14 +97,15 @@ VOID DrawTitle(HDC hdc, RECT rect_c)
 	//ブラシを削除
 	DeleteObject(hbrush);
 
-	//+++++ 背景の文字を描画 ++++++++++++++++++++
-	//MY_TextOut(hdc, &MyText_name);		//名前
-	//MY_TextOut(hdc, &MyText_title);		//タイトル
-	//MY_TextOut(hdc, &MyText_title_st);	//スタート
+	//+++++ 文字を描画 ++++++++++++++++++++
 
+	MY_TextOut(hdc, &MyText_name_OL);		//名前(輪郭)
 	MY_TextOut_Gra(hdc, &MyText_name);		//名前
+	MY_TextOut(hdc, &MyText_title_OL);		//タイトル(輪郭)
 	MY_TextOut_Gra(hdc, &MyText_title);		//タイトル
+	MY_TextOut(hdc, &MyText_title_st_OL);	//スタート(輪郭)
 	MY_TextOut_Gra(hdc, &MyText_title_st);	//スタート
+
 
 	return;
 }

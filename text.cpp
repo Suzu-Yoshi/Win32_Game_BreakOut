@@ -27,12 +27,12 @@ MY_TEXT MyText_title_st_OL;	//スタートの輪郭(OutLine)
 VOID InitTextParam(VOID);							//テキストを初期化する
 VOID MY_TextOut(HDC, MY_TEXT *);					//テキストを表示する関数
 BOOL OnceFont_Read(HWND);							//フォントを一時的に読み込む
-HFONT MY_CreateFont(HDC , MY_TEXT *);				//フォントを作成する
+HFONT MY_CreateFont(HDC, MY_TEXT *);				//フォントを作成する
 VOID OnceFont_Remove(HWND);							//一時的に読み込んだフォントを削除する
-VOID MY_TextOut_Gra(HDC , MY_TEXT *);				//テキストを表示する（グラデーション）
-VOID MY_TextOut_Align(HDC , MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
-BOOL MY_TextOut_Blink(HDC , MY_TEXT *);				//テキストを点滅させる
-VOID MY_TextOut_Two_Gra(HDC ,RECT *,COLORREF ,COLORREF ,BOOL );	//２色のグラデーションで矩形を描画する
+VOID MY_TextOut_Gra(HDC, MY_TEXT *);				//テキストを表示する（グラデーション）
+VOID MY_TextOut_Align(HDC, MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
+BOOL MY_TextOut_Blink(HDC, MY_TEXT *);				//テキストを点滅させる
+VOID MY_TextOut_Two_Gra(HDC, RECT , COLORREF, COLORREF, BOOL);	//２色のグラデーションで矩形を描画する
 
 ///########## テキストを初期化する関数 ##########
 VOID InitTextParam(VOID)
@@ -62,6 +62,15 @@ VOID InitTextParam(VOID)
 
 	MyText_name.blk = FALSE;
 
+	//+++++ 名前の文字の輪郭 ++++++++++++++++++++
+	
+	//パラメータをコピー
+	MyText_name_OL = MyText_name;
+
+	MyText_name_OL.rect.top -= 2;
+	MyText_name_OL.bkcolor = RGB(255, 255, 255);
+	MyText_name_OL.color = RGB(0, 0, 0);
+
 	//+++++ タイトルの文字 ++++++++++++++++++++
 
 	wsprintf(MyText_title.string, TEXT(GAME_TITLE));
@@ -74,7 +83,7 @@ VOID InitTextParam(VOID)
 	MyText_title.rect.right = GAME_RIGHT;
 	MyText_title.rect.bottom = GAME_BOTTOM / 2;
 
-	MyText_title.size = 100;
+	MyText_title.size = 120;
 	MyText_title.bold = MOJI_REGU;
 	MyText_title.ita = FALSE;
 	MyText_title.ul = FALSE;
@@ -86,6 +95,15 @@ VOID InitTextParam(VOID)
 	MyText_title.bkmode = MOJI_BKMD_TRAN;	//背景モード
 
 	MyText_title.blk = FALSE;
+
+	//+++++ タイトルの文字の輪郭 ++++++++++++++++++++
+
+	//パラメータをコピー
+	MyText_title_OL = MyText_title;
+
+	MyText_title_OL.rect.top -= 2;
+	MyText_title_OL.bkcolor = RGB(255, 255, 255);
+	MyText_title_OL.color = RGB(0, 0, 0);
 
 	//+++++ タイトルのスタート文字 ++++++++++++++++++++
 
@@ -115,6 +133,15 @@ VOID InitTextParam(VOID)
 	MyText_title_st.blk_on_spd = FPS_DISP * 2;
 	MyText_title_st.blk_off_spd = FPS_DISP / 2;
 	MyText_title_st.blk_state = TRUE;
+
+	//+++++ タイトルの文字の輪郭 ++++++++++++++++++++
+
+	//パラメータをコピー
+	MyText_title_st_OL = MyText_title_st;
+	
+	MyText_title_st_OL.rect.top -= 2;
+	MyText_title_st_OL.bkcolor = RGB(255, 255, 255);
+	MyText_title_st_OL.color = RGB(0, 0, 0);
 
 	return;
 }
@@ -149,7 +176,7 @@ VOID MY_TextOut(HDC hdc, MY_TEXT *MyText)
 		&sz);
 
 	//文字の表示場所を設定する
-	MY_TextOut_Align(hdc, MyText, &text_pt,sz);
+	MY_TextOut_Align(hdc, MyText, &text_pt, sz);
 
 	//文字の点滅をさせる
 	if (MY_TextOut_Blink(hdc, MyText) == FALSE)
@@ -183,7 +210,7 @@ VOID MY_TextOut_Gra(HDC hdc, MY_TEXT *MyText)
 	}
 
 	//+++++ グラデーションを描画 ++++++++++++++++++++
-	
+
 	TEXTMETRIC tm;			//フォントの詳細情報
 
 	SIZE sz;		//文字の大きさ情報
@@ -228,10 +255,15 @@ VOID MY_TextOut_Gra(HDC hdc, MY_TEXT *MyText)
 	GetClipBox(hdc, &clipRect);
 
 	//クリップ領域に２色のグラデーションで矩形を描画
-	MY_TextOut_Two_Gra(hdc,&clipRect,MyText->color,MyText->bkcolor,FALSE);
-	
+	MY_TextOut_Two_Gra(hdc, clipRect, MyText->color, MyText->bkcolor, FALSE);
+
+	//クリップ領域を解除
+	SelectClipRgn(hdc, NULL);
+
 	//不要なフォントを削除
 	DeleteObject(MyText->hfont);
+
+//http://www.geocities.jp/iooiau/tips/web20back.html
 
 	return;
 }
@@ -243,12 +275,7 @@ VOID MY_TextOut_Gra(HDC hdc, MY_TEXT *MyText)
 //引　数：描画する二つ目の色
 //引　数：グラデーションの向き：水平:TRUE/垂直:FALSE
 //戻り値：なし
-VOID MY_TextOut_Two_Gra(
-	HDC hdc,
-	RECT *rect,
-	COLORREF color1,
-	COLORREF color2,
-	BOOL IsHorizon)
+VOID MY_TextOut_Two_Gra(HDC hdc, RECT rect, COLORREF color1, COLORREF color2, BOOL IsHorizon)
 {
 
 	TRIVERTEX vert[2];	//描画範囲と色を指定
@@ -301,21 +328,21 @@ VOID MY_TextOut_Two_Gra(
 	//                        1111 1111 * 0000 0000←空いたところは0埋め
 
 	//１つ目の色
-	vert[0].x = rect->left;
-	vert[0].y = rect->top;
-	vert[0].Red = GetRValue(color1) <<8;	//赤の情報を取得＆８ビット左シフト
+	vert[0].x = rect.left;
+	vert[0].y = rect.top;
+	vert[0].Red = GetRValue(color1) << 8;	//赤の情報を取得＆８ビット左シフト
 	vert[0].Green = GetGValue(color1) << 8;	//青の情報を取得＆８ビット左シフト
 	vert[0].Blue = GetBValue(color1) << 8;	//緑の情報を取得＆８ビット左シフト
 	vert[0].Alpha = 0;
 
 	//２つ目の色
-	vert[1].x = rect->right;
-	vert[1].y = rect->bottom;
+	vert[1].x = rect.right;
+	vert[1].y = rect.bottom;
 	vert[1].Red = GetRValue(color2) << 8;	//赤の情報を取得＆８ビット左シフト
 	vert[1].Green = GetGValue(color2) << 8;	//青の情報を取得＆８ビット左シフト
 	vert[1].Blue = GetBValue(color2) << 8;	//緑の情報を取得＆８ビット左シフト
 	vert[1].Alpha = 0;
-	
+
 	//グラデーションの向き
 	ULONG rect_h_v;
 	if (IsHorizon == TRUE)
