@@ -19,7 +19,7 @@
 #define GAME_TITLE			"B R E A K  O U T"
 
 //ゲームのタイトルの下
-#define GAME_TITLE_START	"PUSH　SPACE>>START"
+#define GAME_TITLE_START	"P U S H  S P A C E >> S T A R T"
 
 ///########## 列挙型 ##########
 

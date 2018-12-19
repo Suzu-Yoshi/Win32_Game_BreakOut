@@ -134,12 +134,6 @@ extern VOID OnceFont_Remove(HWND);						//一時的に読み込んだフォントを削除する
 extern VOID MY_TextOut_Gra(HDC, MY_TEXT *);				//テキストを表示する（グラデーション）
 extern VOID MY_TextOut_Align(HDC, MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
 extern BOOL MY_TextOut_Blink(HDC, MY_TEXT *);			//テキストを点滅させる
-
-extern VOID MY_TextOut_Two_Gra(
-	HDC,
-	RECT *,
-	COLORREF,
-	COLORREF,
-	BOOL);
+extern VOID MY_TextOut_Two_Gra(HDC, RECT *, COLORREF, COLORREF, BOOL);	//２色のグラデーションで矩形を描画する
 
 ///▲▲▲▲▲ 本体はtext.cpp ▲▲▲▲▲

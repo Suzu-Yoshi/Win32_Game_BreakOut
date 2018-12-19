@@ -16,8 +16,11 @@
 
 //テキスト構造体の変数
 MY_TEXT MyText_name;		//名前
+MY_TEXT MyText_name_OL;		//名前の輪郭(OutLine)
 MY_TEXT MyText_title;		//タイトル
+MY_TEXT MyText_title_OL;	//タイトルの輪郭(OutLine)
 MY_TEXT MyText_title_st;	//スタート
+MY_TEXT MyText_title_st_OL;	//スタートの輪郭(OutLine)
 
 ///########## プロトタイプ宣言 ##########
 
@@ -29,13 +32,7 @@ VOID OnceFont_Remove(HWND);							//一時的に読み込んだフォントを削除する
 VOID MY_TextOut_Gra(HDC , MY_TEXT *);				//テキストを表示する（グラデーション）
 VOID MY_TextOut_Align(HDC , MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
 BOOL MY_TextOut_Blink(HDC , MY_TEXT *);				//テキストを点滅させる
-
-VOID MY_TextOut_Two_Gra(
-	HDC ,
-	RECT *,
-	COLORREF ,
-	COLORREF ,
-	BOOL );
+VOID MY_TextOut_Two_Gra(HDC ,RECT *,COLORREF ,COLORREF ,BOOL );	//２色のグラデーションで矩形を描画する
 
 ///########## テキストを初期化する関数 ##########
 VOID InitTextParam(VOID)
@@ -77,7 +74,7 @@ VOID InitTextParam(VOID)
 	MyText_title.rect.right = GAME_RIGHT;
 	MyText_title.rect.bottom = GAME_BOTTOM / 2;
 
-	MyText_title.size = 80;
+	MyText_title.size = 100;
 	MyText_title.bold = MOJI_REGU;
 	MyText_title.ita = FALSE;
 	MyText_title.ul = FALSE;
@@ -177,14 +174,20 @@ VOID MY_TextOut(HDC hdc, MY_TEXT *MyText)
 ///########## テキストを表示する（グラデーション）関数 ##########
 VOID MY_TextOut_Gra(HDC hdc, MY_TEXT *MyText)
 {
-	//フォントの詳細情報
-	TEXTMETRIC tm;
+
+
+	//+++++ 文字の点滅をさせる ++++++++++++++++++++
+	if (MY_TextOut_Blink(hdc, MyText) == FALSE)
+	{
+		return;
+	}
+
+	//+++++ グラデーションを描画 ++++++++++++++++++++
+	
+	TEXTMETRIC tm;			//フォントの詳細情報
 
 	SIZE sz;		//文字の大きさ情報
 	POINT text_pt;	//文字のXY座標
-
-	//文字のパス(輪郭)取得ここから
-	BeginPath(hdc);
 
 	//フォントを作成
 	MyText->hfont = MY_CreateFont(hdc, MyText);
@@ -195,25 +198,16 @@ VOID MY_TextOut_Gra(HDC hdc, MY_TEXT *MyText)
 	//フォントの詳細情報を取得
 	GetTextMetrics(hdc, &tm);
 
-	SetTextColor(hdc, MyText->bkcolor);	//背景色
-	SetTextColor(hdc, MyText->color);	//文字色
-	SetBkMode(hdc, MyText->bkmode);		//背景モード
-
 	//文字の大きさを取得
-	GetTextExtentPoint32(
-		hdc,
-		MyText->string,
-		lstrlen(MyText->string),
-		&sz);
+	GetTextExtentPoint32(hdc, MyText->string, lstrlen(MyText->string), &sz);
 
 	//文字の表示場所を設定する
-	MY_TextOut_Align(hdc, MyText, &text_pt,sz);
+	MY_TextOut_Align(hdc, MyText, &text_pt, sz);
 
-	//文字の点滅をさせる
-	if (MY_TextOut_Blink(hdc, MyText) == FALSE)
-	{
-		return;
-	}
+	//文字のパス(輪郭)取得ここから
+	BeginPath(hdc);
+
+	SetBkMode(hdc, MyText->bkmode);	//背景モード
 
 	//最終的な文字の輪郭を取得
 	TextOut(
@@ -233,47 +227,9 @@ VOID MY_TextOut_Gra(HDC hdc, MY_TEXT *MyText)
 	RECT clipRect;
 	GetClipBox(hdc, &clipRect);
 
-	//ブラシを作成
-	HBRUSH hbrush = CreateSolidBrush(RGB(0, 0, 255));
-
-	//ブラシを設定
-	SelectObject(hdc, hbrush);
-
 	//クリップ領域に２色のグラデーションで矩形を描画
-
-	MY_TextOut_Two_Gra(hdc,
-		&clipRect,
-		MyText->color,
-		MyText->bkcolor,
-		FALSE
-	);
-
-	////四角を描画
-	//Rectangle(
-	//	hdc,				//デバイスコンテキストのハンドル
-	//	clipRect.left,		//四角の左上のX座標
-	//	clipRect.top,		//四角の左上のY座標
-	//	clipRect.right,		//四角の右下のX座標
-	//	clipRect.bottom);	//四角の右下のY座標
-
-	//ブラシを削除
-	DeleteObject(hbrush);
-
-
-	//HPEN hpen;
-	//hpen = CreatePen(PS_SOLID, 1, MyText->bkcolor);
-	//SelectObject(hdc, hpen);
-
-	//HBRUSH hbrush;
-	//hbrush = CreateSolidBrush(MyText->color);
-	//SelectObject(hdc, hbrush);
-
-	////文字のパス(輪郭)と内部を描画
-	//StrokeAndFillPath(hdc);
-
-	//DeleteObject(hbrush);
-	//DeleteObject(hpen);
-
+	MY_TextOut_Two_Gra(hdc,&clipRect,MyText->color,MyText->bkcolor,FALSE);
+	
 	//不要なフォントを削除
 	DeleteObject(MyText->hfont);
 
@@ -371,7 +327,7 @@ VOID MY_TextOut_Two_Gra(
 		rect_h_v = GRADIENT_FILL_RECT_V;
 	}
 
-	//矩形を描画
+	//グラデーションの矩形を描画
 	GradientFill(hdc, vert, 2, &gra_rect, 1, rect_h_v);
 }
 
