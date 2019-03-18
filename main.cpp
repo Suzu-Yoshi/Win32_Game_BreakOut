@@ -520,8 +520,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 		
-		//音を鳴らした後の処理
-		MY_SOUND_PLAY_END(wp, lp);
+		MY_SOUND_PLAY_LOOP(wp, lp);//音を鳴らした後の処理
 
 		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
@@ -535,16 +534,12 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
 
-		//一時的に読み込んだフォントを削除する
-		OnceFont_Remove(hwnd);
-
-		//読み込んだサウンドをを削除する
-		MY_SOUND_Remove();
+		OnceFont_Remove(hwnd);	//一時的に読み込んだフォントを削除する
+		MY_SOUND_Remove();		//読み込んだサウンドをを削除する
 
 		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
-		//メッセージキューに WM_QUIT を送る
-		PostQuitMessage(0);
+		PostQuitMessage(0);		//メッセージキューに WM_QUIT を送る
 
 		return 0;
 	}

@@ -24,10 +24,10 @@ VOID MY_CHECK_KEYDOWN(VOID)
 	GetKeyboardState(MyKey.KeyBoard);
 
 	//仮想キーコードで、A～Z、0～9は、ASCIIコードを指定
-	BYTE IskeyDown_UP = MyKey.KeyBoard['W'] & 0x80;
-	BYTE IskeyDown_DOWN = MyKey.KeyBoard['D'] & 0x80;
-	BYTE IskeyDown_RIGHT = MyKey.KeyBoard['A'] & 0x80;
-	BYTE IskeyDown_LEFT = MyKey.KeyBoard['S'] & 0x80;
+	BYTE IskeyDown_UP = MyKey.KeyBoard[VK_UP] & 0x80;
+	BYTE IskeyDown_DOWN = MyKey.KeyBoard[VK_DOWN] & 0x80;
+	BYTE IskeyDown_RIGHT = MyKey.KeyBoard[VK_RIGHT] & 0x80;
+	BYTE IskeyDown_LEFT = MyKey.KeyBoard[VK_LEFT] & 0x80;
 	BYTE IskeyDown_SPACE = MyKey.KeyBoard[VK_SPACE] & 0x80;
 
 	//上キーが押されているか判定する

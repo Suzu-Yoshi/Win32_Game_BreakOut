@@ -76,8 +76,8 @@ extern VOID InitSoundParam(HWND hWnd);			//サウンドを初期化する関数
 extern BOOL MY_SOUND_Read(HWND);				//サウンドを読み込む関数
 extern BOOL MY_SOUND_KIND_Read(HWND, MY_SND *);	//サウンドを種類ごとに読み込む関数
 extern VOID MY_SOUND_Remove(VOID);				//読み込んだサウンドを削除する関数
-extern VOID MY_SOUND_PLAY(MY_SND MySnd);		//音を鳴らす関数
-extern VOID MY_SOUND_PLAY_END(WPARAM, LPARAM);	//音を鳴らした後の関数
-extern VOID MY_SOUND_PLAY_END_FUNC(WPARAM, LPARAM, MY_SND);	//音を鳴らした後の処理関数
+extern VOID MY_SOUND_PLAY(MY_SND);				//音を鳴らす関数
+extern VOID MY_SOUND_STOP(MY_SND);				//音を止める関数
+extern VOID MY_SOUND_PLAY_LOOP(WPARAM, LPARAM);	//音を鳴らした後の関数
 
 ///▲▲▲▲▲ 本体はsound.cpp ▲▲▲▲▲

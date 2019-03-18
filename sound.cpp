@@ -16,13 +16,13 @@ MY_SND MySnd_BGM_title;
 
 ///########## プロトタイプ宣言 ##########
 
-VOID InitSoundParam(HWND hWnd);				//サウンドを初期化する関数
-BOOL MY_SOUND_Read(HWND);					//サウンドを読み込む関数
-BOOL MY_SOUND_KIND_Read(HWND, MY_SND *);	//サウンドを種類ごとに読み込む関数
-VOID MY_SOUND_Remove(VOID);					//読み込んだサウンドを削除する関数
-VOID MY_SOUND_PLAY(MY_SND );				//音を鳴らす関数
-VOID MY_SOUND_PLAY_END(WPARAM , LPARAM);	//音を鳴らした後の関数
-VOID MY_SOUND_PLAY_END_FUNC(WPARAM, LPARAM, MY_SND);	//音を鳴らした後の処理関数
+VOID InitSoundParam(HWND hWnd);					//サウンドを初期化する関数
+BOOL MY_SOUND_Read(HWND);						//サウンドを読み込む関数
+BOOL MY_SOUND_KIND_Read(HWND, MY_SND *);		//サウンドを種類ごとに読み込む関数
+VOID MY_SOUND_Remove(VOID);						//読み込んだサウンドを削除する関数
+VOID MY_SOUND_PLAY(MY_SND);						//音を鳴らす関数
+VOID MY_SOUND_STOP(MY_SND);						//音を止める関数
+VOID MY_SOUND_PLAY_END(WPARAM, LPARAM, MY_SND);	//音を鳴らした後の関数
 
 ///########## サウンドを初期化する関数 ##########
 VOID InitSoundParam(HWND hWnd)
@@ -60,49 +60,31 @@ BOOL MY_SOUND_KIND_Read(HWND hWnd, MY_SND *MySnd)
 
 		break;
 
-	case SOUND_KIND_WAVE:
+	case SOUND_KIND_WAVE:	//waveのとき
 
-		//waveの情報を設定
 		MySnd->open.lpstrDeviceType = (LPCWSTR)MCI_DEVTYPE_WAVEFORM_AUDIO;
 		MySnd->open.lpstrElementName = MySnd->filepass;
 
-		//waveを取得
-		res_sound = mciSendCommand(
-			0,
-			MCI_OPEN,			//デバイスをオープン
-			MCI_OPEN_TYPE		//waveファイルの場合
-			| MCI_OPEN_TYPE_ID	//waveファイルの場合
-			| MCI_OPEN_ELEMENT,	//waveファイルの場合
-			(DWORD_PTR)&MySnd->open);
+		res_sound = mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_ELEMENT, (DWORD_PTR)&MySnd->open);	//waveを取得
 
-		//waveが読み込めなかったとき
-		if (res_sound)
+		if (res_sound)		//waveが読み込めなかったとき
 		{
 			MessageBox(hWnd, ERR_MSG_NO_READ_WAVE, ERR_MSG_SND_TITLE, MB_OK);
 			return FALSE;
 		}
 
-		//ウィンドウプロシージャのウィンドウハンドルを設定
-		MySnd->play.dwCallback = (DWORD)hWnd;
+		MySnd->play.dwCallback = (DWORD)hWnd;	//ウィンドウプロシージャのウィンドウハンドルを設定
 
 		break;
 
-	case SOUND_KIND_MP3:
+	case SOUND_KIND_MP3:	//MP3のとき
 
-		//MP3の情報を設定
 		MySnd->open.lpstrDeviceType = TEXT("MPEGVideo");
 		MySnd->open.lpstrElementName = MySnd->filepass;
 
-		//MP3を取得
-		res_sound = mciSendCommand(
-			0,
-			MCI_OPEN, 			//デバイスをオープン
-			MCI_OPEN_TYPE		//MP3ファイルの場合
-			| MCI_OPEN_ELEMENT,	//MP3ファイルの場合
-			(DWORD_PTR)&MySnd->open);
+		res_sound = mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)&MySnd->open);	//MP3を取得
 
-		//MP3が読み込めなかったとき
-		if (res_sound)
+		if (res_sound)		//MP3が読み込めなかったとき
 		{
 			MessageBox(hWnd, ERR_MSG_NO_READ_MP3, ERR_MSG_SND_TITLE, MB_OK);
 			return FALSE;
@@ -132,37 +114,48 @@ VOID MY_SOUND_PLAY(MY_SND MySnd)
 	//サウンドのタイプを判定
 	switch (MySnd.soundType)
 	{
-	case SOUND_TYPE_BGM:
-		//再生情報を管理
-		MCI_STATUS_PARMS mciStatus;
+	case SOUND_TYPE_BGM:	//BGMのとき
+		MCI_STATUS_PARMS mciStatus;					//再生情報を管理
 
-		//再生情報を取得
-		mciStatus.dwItem = MCI_STATUS_MODE;
+		mciStatus.dwItem = MCI_STATUS_MODE;			//再生情報を取得
 		mciSendCommand(MySnd.open.wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatus);
 
-		//再生していないとき
-		if (mciStatus.dwReturn != MCI_MODE_PLAY)
+		if (mciStatus.dwReturn != MCI_MODE_PLAY)	//音を再生していないとき
 		{
-			//再生する
-			mciSendCommand(
-				MySnd.open.wDeviceID,
-				MCI_PLAY,
-				MCI_NOTIFY,
-				(DWORD_PTR)&MySnd.play
-			);
+			mciSendCommand(MySnd.open.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD_PTR)&MySnd.play);	//再生する
 		}
 
 		break;
 
-	case SOUND_TYPE_SE:
+	case SOUND_TYPE_SE:		//効果音
+		mciSendCommand(MySnd.open.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD_PTR)&MySnd.play);		//再生する
 
-		//再生する
-		mciSendCommand(
-			MySnd.open.wDeviceID,
-			MCI_PLAY,
-			MCI_NOTIFY,
-			(DWORD_PTR)&MySnd.play
-		);
+		break;
+	}
+
+	return;
+}
+
+///########## 音を止める関数 ##########
+VOID MY_SOUND_STOP(MY_SND MySnd)
+{
+	switch (MySnd.soundType)
+	{
+	case SOUND_TYPE_BGM:	//BGMのとき
+		MCI_STATUS_PARMS mciStatus;					//再生情報を管理
+
+		mciStatus.dwItem = MCI_STATUS_MODE;			//再生情報を取得
+		mciSendCommand(MySnd.open.wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&mciStatus);
+
+		if (mciStatus.dwReturn == MCI_MODE_PLAY)	//音を再生しているとき
+		{
+			mciSendCommand(MySnd.open.wDeviceID, MCI_STOP, MCI_NOTIFY, (DWORD_PTR)&MySnd.play);	//再生する
+		}
+
+		break;
+
+	case SOUND_TYPE_SE:		//効果音
+		mciSendCommand(MySnd.open.wDeviceID, MCI_STOP, MCI_NOTIFY, (DWORD_PTR)&MySnd.play);		//再生する
 
 		break;
 	}
@@ -171,28 +164,13 @@ VOID MY_SOUND_PLAY(MY_SND MySnd)
 }
 
 ///########## 音を鳴らした後の関数 ##########
-VOID MY_SOUND_PLAY_END(WPARAM wp, LPARAM lp)
+VOID MY_SOUND_PLAY_LOOP(WPARAM wp, LPARAM lp)
 {
-	//音を鳴らしたあとの処理
-	MY_SOUND_PLAY_END_FUNC(wp, lp, MySnd_BGM_title);
-
-	return;
-}
-
-///########## 音を鳴らした後の処理関数 ##########
-VOID MY_SOUND_PLAY_END_FUNC(WPARAM wp,LPARAM lp,MY_SND MySnd)
-{
-	if (lp == MySnd.open.wDeviceID)
+	if (lp == MySnd_BGM_title.open.wDeviceID)	//タイトル画面のBGMが終了したとき
 	{
-		//再生が終了したとき
-		if (wp == MCI_NOTIFY_SUCCESSFUL)
+		if (wp == MCI_NOTIFY_SUCCESSFUL)		//再生が終了したとき
 		{
-			//シークバーを先頭に戻す
-			mciSendCommand(
-				MySnd.open.wDeviceID,
-				MCI_SEEK,
-				MCI_SEEK_TO_START,
-				0);
+			mciSendCommand(MySnd_BGM_title.open.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);	//シークバーを先頭に戻す
 		}
 	}
 
