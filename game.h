@@ -13,7 +13,7 @@
 #define GAME_POS_Y		  0		//左上のY座標
 
 //自分の名前
-#define GAME_MY_NAME		"suzuki"
+#define GAME_MY_NAME		"HAMAJO"
 
 //ゲームのタイトル
 #define GAME_TITLE			"BREAK OUT"

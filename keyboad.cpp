@@ -18,8 +18,6 @@ MY_KEY MyKey;
 VOID MY_CHECK_KEYDOWN(VOID);
 
 ///########## どのキーを押しているか判定する関数 ##########
-//引　数：なし
-//戻り値：なし
 VOID MY_CHECK_KEYDOWN(VOID)
 {
 	//すべての仮想キーの現在の状態を一気に取得する

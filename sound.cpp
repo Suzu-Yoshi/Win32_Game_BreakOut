@@ -28,13 +28,12 @@ VOID MY_SOUND_PLAY_END_FUNC(WPARAM, LPARAM, MY_SND);	//音を鳴らした後の処理関数
 VOID InitSoundParam(HWND hWnd)
 {
 
-	//+++++ タイトル画面のBGM ++++++++++++++++++++
-
+	//タイトル画面のBGM
 	MySnd_BGM_title.filepass = TEXT(SOUND_BGM_MP3_1);
 	MySnd_BGM_title.fileKind = SOUND_KIND_MP3;
 	MySnd_BGM_title.soundType = SOUND_TYPE_BGM;
 
-
+	return;
 }
 
 ///########## サウンドを読み込む関数 ##########

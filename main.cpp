@@ -181,9 +181,6 @@ BOOL MY_CreateWindowClass(HINSTANCE hInstance)
 }
 
 ///########## ウィンドウを生成する関数 ##########
-//引　数：メイン関数のインスタンスハンドル
-//戻り値：TRUE ：正常終了
-//戻り値：FALSE：異常終了
 BOOL MY_CreateWindow(HINSTANCE hInstance)
 {
 	switch (MyWin.win_mode)
@@ -307,8 +304,6 @@ VOID MY_SetClientSize(VOID)
 }
 
 ///########## ダブルバッファリングの設定をする関数 ##########
-//引　数：なし
-//戻り値：なし
 VOID MY_SetDoubleBufferring(VOID)
 {
 	// ウインドウのデバイスコンテキストのハンドルを取得

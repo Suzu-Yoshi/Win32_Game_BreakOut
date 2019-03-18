@@ -8,6 +8,7 @@
 #include "text.h"
 #include "game.h"	
 #include "sound.h"
+#include "keyboad.h"
 
 ///########## プロトタイプ宣言 ##########
 
@@ -20,8 +21,6 @@ VOID DrawTitle(HDC, RECT);			//タイトル画面の背景を描画する
 int GAME_scene;		//ゲームのシーン
 
 ///########## ゲームを初期化する関数 ##########
-//引　数：なし
-//戻り値：なし
 VOID InitGameParam(HWND hWnd)
 {
 	//ゲームのシーン設定
@@ -29,8 +28,6 @@ VOID InitGameParam(HWND hWnd)
 }
 
 ///########## ゲームを終了する関数 ##########
-//引　数：なし
-//戻り値：なし
 VOID RemoveGameParam(VOID)
 {
 
@@ -39,8 +36,6 @@ VOID RemoveGameParam(VOID)
 
 
 ///########## シーンごとに描画を変える関数 ##########
-//引　数：なし
-//戻り値：なし
 VOID selectSceneDraw(HDC hdc , RECT rect_cli)
 {
 	switch (GAME_scene)
@@ -54,6 +49,9 @@ VOID selectSceneDraw(HDC hdc , RECT rect_cli)
 
 		//タイトルのBGMを鳴らす
 		MY_SOUND_PLAY(MySnd_BGM_title);
+
+		//スペースキーが押されたとき
+		if()
 
 		break;
 	case SCENE_PLAY:
@@ -73,9 +71,6 @@ VOID selectSceneDraw(HDC hdc , RECT rect_cli)
 }
 
 ///########## タイトル画面の背景を描画する関数 ##########
-//引　数：デバイスコンテキストのハンドル
-//引　数：クライアント領域
-//戻り値：なし
 VOID DrawTitle(HDC hdc, RECT rect_c)
 {
 	//+++++ 背景の描画 ++++++++++++++++++++

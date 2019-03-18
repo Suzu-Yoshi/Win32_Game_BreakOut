@@ -24,14 +24,14 @@ MY_TEXT MyText_title_st_OL;	//スタートの輪郭(OutLine)
 
 ///########## プロトタイプ宣言 ##########
 
-VOID InitTextParam(VOID);							//テキストを初期化する
-VOID MY_TextOut(HDC, MY_TEXT *);					//テキストを表示する関数
-BOOL OnceFont_Read(HWND);							//フォントを一時的に読み込む
-HFONT MY_CreateFont(HDC, MY_TEXT *);				//フォントを作成する
-VOID OnceFont_Remove(HWND);							//一時的に読み込んだフォントを削除する
-VOID MY_TextOut_Gra(HDC, MY_TEXT *);				//テキストを表示する（グラデーション）
+VOID InitTextParam(VOID);								//テキストを初期化する
+VOID MY_TextOut(HDC, MY_TEXT *);						//テキストを表示する関数
+BOOL OnceFont_Read(HWND);								//フォントを一時的に読み込む
+HFONT MY_CreateFont(HDC, MY_TEXT *);					//フォントを作成する
+VOID OnceFont_Remove(HWND);								//一時的に読み込んだフォントを削除する
+VOID MY_TextOut_Gra(HDC, MY_TEXT *);					//テキストを表示する（グラデーション）
 VOID MY_TextOut_Align(HDC, MY_TEXT *, POINT *, SIZE);	//テキストを表示するパターンを判断する
-BOOL MY_TextOut_Blink(HDC, MY_TEXT *);				//テキストを点滅させる
+BOOL MY_TextOut_Blink(HDC, MY_TEXT *);					//テキストを点滅させる
 VOID MY_TextOut_Two_Gra(HDC, RECT , COLORREF, COLORREF, BOOL);	//２色のグラデーションで矩形を描画する
 
 ///########## テキストを初期化する関数 ##########
@@ -56,9 +56,9 @@ VOID InitTextParam(VOID)
 	MyText_name.st = FALSE;
 	MyText_name.align = TEXT_ALIGN_C_CENTER;
 
-	MyText_name.bkcolor = RGB(0, 0, 0);	//背景色
-	MyText_name.color = RGB(255, 255, 255);//文字色
-	MyText_name.bkmode = MOJI_BKMD_TRAN;	//背景モード
+	MyText_name.color = RGB(240, 240, 240);		//文字色（グラデーションの場合：上）
+	MyText_name.bkcolor = RGB(0, 0, 0);			//背景色（グラデーションの場合：下）
+	MyText_name.bkmode = MOJI_BKMD_TRAN;		//背景モード
 
 	MyText_name.blk = FALSE;
 
@@ -67,7 +67,8 @@ VOID InitTextParam(VOID)
 	//パラメータをコピー
 	MyText_name_OL = MyText_name;
 
-	MyText_name_OL.rect.top -= 2;
+	MyText_name_OL.rect.top += 0;	//輪郭を付ける場合は数値を増減する
+	MyText_name_OL.rect.left += 0;	//輪郭を付ける場合は数値を増減する;
 	MyText_name_OL.bkcolor = RGB(255, 255, 255);
 	MyText_name_OL.color = RGB(0, 0, 0);
 
@@ -90,9 +91,10 @@ VOID InitTextParam(VOID)
 	MyText_title.st = FALSE;
 	MyText_title.align = TEXT_ALIGN_D_CENTER;
 
-	MyText_title.bkcolor = RGB(0, 0, 0);	//背景色
-	MyText_title.color = RGB(255, 255, 255);//文字色
-	MyText_title.bkmode = MOJI_BKMD_TRAN;	//背景モード
+
+	MyText_title.color = RGB(240, 240, 240);		//文字色（グラデーションの場合：上）
+	MyText_title.bkcolor = RGB(0, 0, 0);			//背景色（グラデーションの場合：下）
+	MyText_title.bkmode = MOJI_BKMD_TRAN;			//背景モード
 
 	MyText_title.blk = FALSE;
 
@@ -101,7 +103,8 @@ VOID InitTextParam(VOID)
 	//パラメータをコピー
 	MyText_title_OL = MyText_title;
 
-	MyText_title_OL.rect.top -= 2;
+	MyText_title_OL.rect.top += 0;	//輪郭を付ける場合は数値を増減する
+	MyText_title_OL.rect.left += 0;	//輪郭を付ける場合は数値を増減する;
 	MyText_title_OL.bkcolor = RGB(255, 255, 255);
 	MyText_title_OL.color = RGB(0, 0, 0);
 
@@ -120,13 +123,13 @@ VOID InitTextParam(VOID)
 	MyText_title_st.size = 50;
 	MyText_title_st.bold = MOJI_REGU;
 	MyText_title_st.ita = FALSE;
-	MyText_title_st.ul = TRUE;
+	MyText_title_st.ul = FALSE;
 	MyText_title_st.st = FALSE;
 	MyText_title_st.align = TEXT_ALIGN_C_CENTER;
 
-	MyText_title_st.bkcolor = RGB(0, 0, 255);		//背景色
-	MyText_title_st.color = RGB(255, 0, 0);	//文字色
-	MyText_title_st.bkmode = MOJI_BKMD_TRAN;	//背景モード
+	MyText_title_st.color = RGB(0, 0, 0);			//文字色（グラデーションの場合：上）
+	MyText_title_st.bkcolor = RGB(200, 200, 200);		//背景色（グラデーションの場合：下）
+	MyText_title_st.bkmode = MOJI_BKMD_TRAN;		//背景モード
 
 	MyText_title_st.blk = TRUE;
 	MyText_title_st.blk_cnt = 0;
@@ -139,7 +142,8 @@ VOID InitTextParam(VOID)
 	//パラメータをコピー
 	MyText_title_st_OL = MyText_title_st;
 	
-	MyText_title_st_OL.rect.top -= 2;
+	MyText_title_st_OL.rect.top += 0;	//輪郭を付ける場合は数値を増減する
+	MyText_title_st_OL.rect.left += 0;	//輪郭を付ける場合は数値を増減する
 	MyText_title_st_OL.bkcolor = RGB(255, 255, 255);
 	MyText_title_st_OL.color = RGB(0, 0, 0);
 
